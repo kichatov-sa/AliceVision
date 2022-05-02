@@ -348,7 +348,7 @@ int aliceVision_main(int argc, char** argv)
       const std::string dstImage = (undistortedImagesFolderPath / (std::to_string(view.getIntrinsicId()) + "_" + imagePathStem + "." + image::EImageFileType_enumToString(outputFileType))).string();
       const camera::IntrinsicBase * cam = iterIntrinsic->second.get();
 
-      image::readImage(view.getImagePath(), image, image::EImageColorSpace::LINEAR);
+      image::readImage(view.getImagePath(), image, image::EImageColorSpace::SRGB_LINEAR);
       oiio::ParamValueList metadata = image::readImageMetadata(view.getImagePath());
 
       if(cam->isValid() && cam->hasDistortion())

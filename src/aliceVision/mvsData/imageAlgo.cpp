@@ -116,11 +116,11 @@ void colorconvert(oiio::ImageBuf& imgBuf, imageIO::EImageColorSpace fromColorSpa
     if(fromColorSpace == toColorSpace)
         return;
 
-    else if(toColorSpace == EImageColorSpace::LINEAR)
+    else if(toColorSpace == EImageColorSpace::SRGB_LINEAR)
     {
         if(fromColorSpace == EImageColorSpace::SRGB)
             oiio::ImageBufAlgo::colorconvert(imgBuf, imgBuf,
-                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::LINEAR));
+                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::SRGB_LINEAR));
         else if(fromColorSpace == EImageColorSpace::XYZ)
             processImage(imgBuf, &XYZtoRGB);
         else if(fromColorSpace == EImageColorSpace::LAB)
@@ -133,16 +133,16 @@ void colorconvert(oiio::ImageBuf& imgBuf, imageIO::EImageColorSpace fromColorSpa
         else if(fromColorSpace == EImageColorSpace::LAB)
             processImage(imgBuf, &LABtoRGB);
         oiio::ImageBufAlgo::colorconvert(imgBuf, imgBuf,
-                                         EImageColorSpace_enumToString(EImageColorSpace::LINEAR), EImageColorSpace_enumToString(EImageColorSpace::SRGB));
+                                         EImageColorSpace_enumToString(EImageColorSpace::SRGB_LINEAR), EImageColorSpace_enumToString(EImageColorSpace::SRGB));
     }
     else if(toColorSpace == EImageColorSpace::XYZ)
     {
-        if(fromColorSpace == EImageColorSpace::LINEAR)
+        if(fromColorSpace == EImageColorSpace::SRGB_LINEAR)
             processImage(imgBuf, &RGBtoXYZ);
         else if(fromColorSpace == EImageColorSpace::SRGB)
         {
             oiio::ImageBufAlgo::colorconvert(imgBuf, imgBuf,
-                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::LINEAR));
+                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::SRGB_LINEAR));
             processImage(imgBuf, &RGBtoXYZ);
         }
         else if(fromColorSpace == EImageColorSpace::LAB)
@@ -150,12 +150,12 @@ void colorconvert(oiio::ImageBuf& imgBuf, imageIO::EImageColorSpace fromColorSpa
     }
     else if(toColorSpace == EImageColorSpace::LAB)
     {
-        if(fromColorSpace == EImageColorSpace::LINEAR)
+        if(fromColorSpace == EImageColorSpace::SRGB_LINEAR)
             processImage(imgBuf, &RGBtoLAB);
         else if(fromColorSpace == EImageColorSpace::SRGB)
         {
             oiio::ImageBufAlgo::colorconvert(imgBuf, imgBuf,
-                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::LINEAR));
+                                             EImageColorSpace_enumToString(EImageColorSpace::SRGB), EImageColorSpace_enumToString(EImageColorSpace::SRGB_LINEAR));
             processImage(imgBuf, &RGBtoLAB);
         }
         else if(fromColorSpace == EImageColorSpace::XYZ)

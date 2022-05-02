@@ -45,7 +45,7 @@ template <class ImageT, class MaskFuncT>
 void process(const std::string &dstColorImage, const IntrinsicBase* cam, const oiio::ParamValueList & metadata, const std::string & srcImage, bool evCorrection, float exposureCompensation, MaskFuncT && maskFunc)
 {
   ImageT image, image_ud;
-  readImage(srcImage, image, image::EImageColorSpace::LINEAR);
+  readImage(srcImage, image, image::EImageColorSpace::SRGB_LINEAR);
 
   //exposure correction
   if(evCorrection)
@@ -86,12 +86,12 @@ bool tryLoadMask(image::Image<unsigned char>* mask, const std::vector<std::strin
 
       if(fs::exists(idMaskPath))
       {
-        image::readImage(idMaskPath.string(), *mask, image::EImageColorSpace::LINEAR);
+        image::readImage(idMaskPath.string(), *mask, image::EImageColorSpace::SRGB_LINEAR);
         return true;
       }
       else if(fs::exists(nameMaskPath))
       {
-        image::readImage(nameMaskPath.string(), *mask, image::EImageColorSpace::LINEAR);
+        image::readImage(nameMaskPath.string(), *mask, image::EImageColorSpace::SRGB_LINEAR);
         return true;
       }
     }

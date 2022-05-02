@@ -123,7 +123,7 @@ int aliceVision_main(int argc, char** argv)
     try
     {
       ALICEVISION_LOG_INFO("Reading " << path);
-      image::readImage(path, image, image::EImageColorSpace::LINEAR);
+      image::readImage(path, image, image::EImageColorSpace::SRGB_LINEAR);
       metadata = image::readImageMetadata(path);
     }
     catch(std::exception& e)

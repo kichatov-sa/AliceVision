@@ -44,12 +44,12 @@ bool tryLoadMask(image::Image<unsigned char>* mask, const std::vector<std::strin
 
             if (fs::exists(idMaskPath))
             {
-                image::readImage(idMaskPath.string(), *mask, image::EImageColorSpace::LINEAR);
+                image::readImage(idMaskPath.string(), *mask, image::EImageColorSpace::SRGB_LINEAR);
                 return true;
             }
             else if (fs::exists(nameMaskPath))
             {
-                image::readImage(nameMaskPath.string(), *mask, image::EImageColorSpace::LINEAR);
+                image::readImage(nameMaskPath.string(), *mask, image::EImageColorSpace::SRGB_LINEAR);
                 return true;
             }
         }

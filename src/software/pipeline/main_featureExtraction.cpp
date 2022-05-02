@@ -258,11 +258,11 @@ private:
 
       if(fs::exists(idMaskPath))
       {
-        image::readImage(idMaskPath.string(), mask, image::EImageColorSpace::LINEAR);
+        image::readImage(idMaskPath.string(), mask, image::EImageColorSpace::SRGB_LINEAR);
       }
       else if(fs::exists(nameMaskPath))
       {
-        image::readImage(nameMaskPath.string(), mask, image::EImageColorSpace::LINEAR);
+        image::readImage(nameMaskPath.string(), mask, image::EImageColorSpace::SRGB_LINEAR);
       }
     }
 

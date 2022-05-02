@@ -116,7 +116,7 @@ int aliceVision_main(int argc, char **argv)
     }
 
     image::Image<image::RGBColor> image, imageUd;
-    image::readImage(view.getImagePath(), image, image::EImageColorSpace::LINEAR);
+    image::readImage(view.getImagePath(), image, image::EImageColorSpace::SRGB_LINEAR);
 
     // compute undistorted image
     if(intrinsicPtr->isValid() && intrinsicPtr->hasDistortion())

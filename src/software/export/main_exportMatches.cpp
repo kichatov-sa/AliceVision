@@ -200,7 +200,7 @@ int aliceVision_main(int argc, char ** argv)
     boost::filesystem::path origImgPath(viewImagePathI);
     std::string origFilename = origImgPath.stem().string();
     image::Image<image::RGBfColor> originalImage;
-    image::readImage(viewImagePathI, originalImage, image::EImageColorSpace::LINEAR);
+    image::readImage(viewImagePathI, originalImage, image::EImageColorSpace::SRGB_LINEAR);
     destFilename_I = (fs::path(outputFolder) / (origFilename + ".png")).string();
     image::writeImage(destFilename_I, originalImage, image::EImageColorSpace::SRGB);
     }
@@ -209,7 +209,7 @@ int aliceVision_main(int argc, char ** argv)
     boost::filesystem::path origImgPath(viewImagePathJ);
     std::string origFilename = origImgPath.stem().string();
     image::Image<image::RGBfColor> originalImage;
-    image::readImage(viewImagePathJ, originalImage, image::EImageColorSpace::LINEAR);
+    image::readImage(viewImagePathJ, originalImage, image::EImageColorSpace::SRGB_LINEAR);
     destFilename_J = (fs::path(outputFolder) / (origFilename + ".png")).string();
     image::writeImage(destFilename_J, originalImage, image::EImageColorSpace::SRGB);
     }

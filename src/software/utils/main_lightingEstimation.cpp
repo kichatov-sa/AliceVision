@@ -364,12 +364,12 @@ int main(int argc, char** argv)
     const std::string normalsPath = mvsUtils::getFileNameFromViewId(mp, viewId, mvsUtils::EFileType::normalMap, 0);
 
     image::Image<image::RGBfColor> normals;
-    image::readImage(normalsPath, normals, image::EImageColorSpace::LINEAR);
+    image::readImage(normalsPath, normals, image::EImageColorSpace::SRGB_LINEAR);
 
     if(lightingColor == ELightingColor::Luminance)
     {
       image::Image<float> albedo, picture;
-      image::readImage(picturePath, picture, image::EImageColorSpace::LINEAR);
+      image::readImage(picturePath, picture, image::EImageColorSpace::SRGB_LINEAR);
 
       initAlbedo(albedo, picture, albedoEstimationMethod, albedoEstimationFilterSize, outputFolder, viewId);
 
@@ -378,7 +378,7 @@ int main(int argc, char** argv)
     else if(lightingColor == ELightingColor::RGB)
     {
       image::Image<image::RGBfColor> albedo, picture;
-      image::readImage(picturePath, picture, image::EImageColorSpace::LINEAR);
+      image::readImage(picturePath, picture, image::EImageColorSpace::SRGB_LINEAR);
 
       initAlbedo(albedo, picture, albedoEstimationMethod, albedoEstimationFilterSize, outputFolder, viewId);
 

@@ -91,7 +91,7 @@ double focalFromPinholeHeight(int height, double thetaMax = degreeToRadian(60.0)
 bool splitDualFisheye(const std::string& imagePath, const std::string& outputFolder, const std::string& splitPreset)
 {
   image::Image<image::RGBfColor> imageSource;
-  image::readImage(imagePath, imageSource, image::EImageColorSpace::LINEAR);
+  image::readImage(imagePath, imageSource, image::EImageColorSpace::SRGB_LINEAR);
 
   oiio::ImageBuf buffer;
   image::getBufferFromImage(imageSource, buffer);
@@ -141,7 +141,7 @@ bool splitDualFisheye(const std::string& imagePath, const std::string& outputFol
 bool splitEquirectangular(const std::string& imagePath, const std::string& outputFolder, std::size_t nbSplits, std::size_t splitResolution, double fovDegree)
 {
   image::Image<image::RGBColor> imageSource;
-  image::readImage(imagePath, imageSource, image::EImageColorSpace::LINEAR);
+  image::readImage(imagePath, imageSource, image::EImageColorSpace::SRGB_LINEAR);
 
   const int inWidth = imageSource.Width();
   const int inHeight = imageSource.Height();
@@ -210,7 +210,7 @@ bool splitEquirectangular(const std::string& imagePath, const std::string& outpu
 bool splitEquirectangularDemo(const std::string& imagePath, const std::string& outputFolder, std::size_t nbSplits, std::size_t splitResolution, double fovDegree)
 {
   image::Image<image::RGBColor> imageSource;
-  image::readImage(imagePath, imageSource, image::EImageColorSpace::LINEAR);
+  image::readImage(imagePath, imageSource, image::EImageColorSpace::SRGB_LINEAR);
 
   const int inWidth = imageSource.Width();
   const int inHeight = imageSource.Height();

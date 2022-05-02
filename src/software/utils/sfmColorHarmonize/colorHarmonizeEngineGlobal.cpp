@@ -287,8 +287,8 @@ bool ColorHarmonizationEngineGlobal::Process()
 
     //-- Compute the histograms
     Image< RGBColor > imageI, imageJ;
-    readImage(p_imaNames.first, imageI, image::EImageColorSpace::LINEAR);
-    readImage(p_imaNames.second, imageJ, image::EImageColorSpace::LINEAR);
+    readImage(p_imaNames.first, imageI, image::EImageColorSpace::SRGB_LINEAR);
+    readImage(p_imaNames.second, imageJ, image::EImageColorSpace::SRGB_LINEAR);
 
     utils::Histogram< double > histoI( minvalue, maxvalue, bin);
     utils::Histogram< double > histoJ( minvalue, maxvalue, bin);
@@ -415,7 +415,7 @@ bool ColorHarmonizationEngineGlobal::Process()
     }
 
     Image< RGBColor > image_c;
-    readImage( _fileNames[ imaNum ], image_c , image::EImageColorSpace::LINEAR);
+    readImage( _fileNames[ imaNum ], image_c , image::EImageColorSpace::SRGB_LINEAR);
 
     #pragma omp parallel for
     for( int j = 0; j < image_c.Height(); ++j )

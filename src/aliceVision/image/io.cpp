@@ -32,7 +32,7 @@ namespace image {
 std::string EImageColorSpace_informations()
 {
     return EImageColorSpace_enumToString(EImageColorSpace::AUTO) + ", " +
-           EImageColorSpace_enumToString(EImageColorSpace::LINEAR) + ", " +
+           EImageColorSpace_enumToString(EImageColorSpace::SRGB_LINEAR) + ", " +
            EImageColorSpace_enumToString(EImageColorSpace::SRGB) + ", " +
            EImageColorSpace_enumToString(EImageColorSpace::ACES) + ", " +
            EImageColorSpace_enumToString(EImageColorSpace::ACEScg) + ", " +
@@ -45,8 +45,8 @@ EImageColorSpace EImageColorSpace_stringToEnum(const std::string& dataType)
 
     if(type == "auto")
         return EImageColorSpace::AUTO;
-    if(type == "linear")
-        return EImageColorSpace::LINEAR;
+    if((type == "srgb_linear")||(type == "linear"))
+        return EImageColorSpace::SRGB_LINEAR;
     if(type == "srgb")
         return EImageColorSpace::SRGB;
     if(type == "aces")
@@ -65,8 +65,8 @@ std::string EImageColorSpace_enumToString(const EImageColorSpace dataType)
     {
         case EImageColorSpace::AUTO:
             return "auto";
-        case EImageColorSpace::LINEAR:
-            return "linear";
+        case EImageColorSpace::SRGB_LINEAR:
+            return "srgb_linear";
         case EImageColorSpace::SRGB:
             return "srgb";
         case EImageColorSpace::ACES:
@@ -365,7 +365,7 @@ void readImage(const std::string& path,
       ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to sRGB colorspace");
     }
   }
-  else if(imageReadOptions.outputColorSpace == EImageColorSpace::LINEAR) // color conversion to linear
+  else if(imageReadOptions.outputColorSpace == EImageColorSpace::SRGB_LINEAR) // color conversion to linear
   {
     if (colorSpace != "Linear")
     {
@@ -501,7 +501,7 @@ void writeImage(const std::string& path,
     if(isJPG || isPNG)
       imageColorSpace = EImageColorSpace::SRGB;
     else
-      imageColorSpace = EImageColorSpace::LINEAR;
+      imageColorSpace = EImageColorSpace::SRGB_LINEAR;
   }
 
   oiio::ImageSpec imageSpec(image.Width(), image.Height(), nchannels, typeDesc);
@@ -523,7 +523,7 @@ void writeImage(const std::string& path,
       oiio::ImageBufAlgo::colorconvert(colorspaceBuf, *outBuf, "Linear", "sRGB");
       outBuf = &colorspaceBuf;
   }
-  else if((imageColorSpace != EImageColorSpace::LINEAR) && (imageColorSpace != EImageColorSpace::NO_CONVERSION)) // ACES or ACEScg
+  else if((imageColorSpace != EImageColorSpace::SRGB_LINEAR) && (imageColorSpace != EImageColorSpace::NO_CONVERSION)) // ACES or ACEScg
   {
       char const* val = getenv("ALICEVISION_ROOT");
       if (val == NULL)
@@ -601,7 +601,7 @@ void writeImageNoFloat(const std::string& path,
     if(isJPG || isPNG)
       imageColorSpace = EImageColorSpace::SRGB;
     else
-      imageColorSpace = EImageColorSpace::LINEAR;
+      imageColorSpace = EImageColorSpace::SRGB_LINEAR;
   }
 
   oiio::ImageSpec imageSpec(image.Width(), image.Height(), 1, typeDesc);

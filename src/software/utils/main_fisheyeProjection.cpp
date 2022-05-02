@@ -227,7 +227,7 @@ void stitchPanorama(const std::vector<std::string>& imagePaths, const std::vecto
 
     ALICEVISION_LOG_INFO("Projecting " << imagePaths[i] << " into equirectangular space");
 
-    image::readImage(imagePaths[i], imageIn, image::EImageColorSpace::LINEAR);
+    image::readImage(imagePaths[i], imageIn, image::EImageColorSpace::SRGB_LINEAR);
     image::getBufferFromImage(imageIn, buffer);
     buffer.specmod().extra_attribs = metadatas[i];
 

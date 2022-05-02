@@ -488,7 +488,7 @@ int aliceVision_main(int argc, char * argv[])
     std::vector<std::string> metadataFolders;
     std::string outputPath;
     EImageFormat outputFormat = EImageFormat::RGBA;
-    image::EImageColorSpace outputColorSpace = image::EImageColorSpace::LINEAR;
+    image::EImageColorSpace outputColorSpace = image::EImageColorSpace::SRGB_LINEAR;
     image::EStorageDataType storageDataType = image::EStorageDataType::Float;
     std::string extension;
 
@@ -710,7 +710,7 @@ int aliceVision_main(int argc, char * argv[])
 
 
             image::ImageReadOptions options;
-            options.outputColorSpace = image::EImageColorSpace::LINEAR;
+            options.outputColorSpace = image::EImageColorSpace::SRGB_LINEAR;
             options.applyWhiteBalance = view.getApplyWhiteBalance();
 
             // Read original image
@@ -824,7 +824,7 @@ int aliceVision_main(int argc, char * argv[])
 
             // Read original image
             image::Image<image::RGBAfColor> image;
-            image::readImage(inputFilePath, image, image::EImageColorSpace::LINEAR);
+            image::readImage(inputFilePath, image, image::EImageColorSpace::SRGB_LINEAR);
 
             // Image processing
             processImage(image, pParams);

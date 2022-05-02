@@ -337,7 +337,7 @@ void loadImage(const std::string& path, const MultiViewParams& mp, int camId, Im
     // if exposure correction, apply it in linear colorspace and then convert colorspace
     else
     {
-        imageIO::readImage(path, img, imageIO::EImageColorSpace::LINEAR);
+        imageIO::readImage(path, img, imageIO::EImageColorSpace::SRGB_LINEAR);
         checkImageSize();
 
         oiio::ParamValueList metadata;
@@ -357,7 +357,7 @@ void loadImage(const std::string& path, const MultiViewParams& mp, int camId, Im
             for(int pix = 0; pix < img.size(); ++pix)
                 img[pix] = img[pix] * exposureCompensation;
 
-            imageAlgo::colorconvert(img, imageIO::EImageColorSpace::LINEAR, colorspace);
+            imageAlgo::colorconvert(img, imageIO::EImageColorSpace::SRGB_LINEAR, colorspace);
         }
     }
 

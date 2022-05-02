@@ -27,7 +27,7 @@ namespace image {
 enum class EImageColorSpace
 {
   AUTO,
-  LINEAR,
+  SRGB_LINEAR,
   SRGB,
   ACES,
   ACEScg,

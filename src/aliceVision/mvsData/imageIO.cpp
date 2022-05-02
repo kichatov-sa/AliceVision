@@ -42,7 +42,7 @@ std::string EImageColorSpace_enumToString(const EImageColorSpace colorSpace)
     switch(colorSpace)
     {
     case EImageColorSpace::SRGB: return "sRGB"; // WARNING: string should match with OIIO definitions or implemented conversion
-    case EImageColorSpace::LINEAR: return "Linear";
+    case EImageColorSpace::SRGB_LINEAR: return "Linear";
     case EImageColorSpace::LAB: return "LAB";
     case EImageColorSpace::XYZ: return "XYZ";
     default: ;
@@ -52,7 +52,7 @@ std::string EImageColorSpace_enumToString(const EImageColorSpace colorSpace)
 
 EImageColorSpace EImageColorSpace_stringToEnum(const std::string& colorspace)
 {
-    if(colorspace == "Linear") return EImageColorSpace::LINEAR;
+    if(colorspace == "Linear") return EImageColorSpace::SRGB_LINEAR;
     if(colorspace == "sRGB") return EImageColorSpace::SRGB;
     if(colorspace == "LAB") return  EImageColorSpace::LAB;
     if(colorspace == "XYZ") return EImageColorSpace::XYZ;
@@ -400,7 +400,7 @@ void writeImage(const std::string& path,
       if(isJPG || isPNG)
         colorspace.to = EImageColorSpace::SRGB;
       else
-        colorspace.to = EImageColorSpace::LINEAR;
+        colorspace.to = EImageColorSpace::SRGB_LINEAR;
     }
 
 

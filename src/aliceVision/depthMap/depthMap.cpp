@@ -73,7 +73,7 @@ void estimateAndRefineDepthMaps(int cudaDeviceIndex, mvsUtils::MultiViewParams& 
     computeScaleStepSgmParams(mp, sgmParams);
 
     // load images from files into RAM
-    mvsUtils::ImagesCache<ImageRGBAf> ic(mp, imageIO::EImageColorSpace::LINEAR);
+    mvsUtils::ImagesCache<ImageRGBAf> ic(mp, imageIO::EImageColorSpace::SRGB_LINEAR);
 
     // load stuff on GPU memory and creates multi-level images and computes gradients
     PlaneSweepingCuda cps(cudaDeviceIndex, ic, mp, sgmParams.scale);
@@ -115,7 +115,7 @@ void computeNormalMaps(int cudaDeviceIndex, mvsUtils::MultiViewParams& mp, const
     const float gammaP = 1.0f;
     const int wsh = 3;
 
-    mvsUtils::ImagesCache<ImageRGBAf> ic(mp, EImageColorSpace::LINEAR);
+    mvsUtils::ImagesCache<ImageRGBAf> ic(mp, EImageColorSpace::SRGB_LINEAR);
     PlaneSweepingCuda cps(cudaDeviceIndex, ic, mp, 1);
 
     NormalMapping* mapping = cps.createNormalMapping();
