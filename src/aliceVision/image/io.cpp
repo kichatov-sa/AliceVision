@@ -354,25 +354,76 @@ void readImage(const std::string& path,
   if(imageReadOptions.outputColorSpace == EImageColorSpace::AUTO)
     throw std::runtime_error("You must specify a requested color space for image file '" + path + "'.");
 
-  const std::string& colorSpace = inBuf.spec().get_string_attribute("oiio:ColorSpace", "sRGB"); // default image color space is sRGB
-  ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpace << " colorspace).");
+  char const* val = getenv("ALICEVISION_ROOT");
+  if (val == NULL)
+  {
+      throw std::runtime_error("ALICEVISION_ROOT is not defined, OCIO config file cannot be accessed.");
+  }
+  std::string configOCIOFilePath = std::string(val);
+  configOCIOFilePath.append("/share/aliceVision/config.ocio");
 
-  if(imageReadOptions.outputColorSpace == EImageColorSpace::SRGB) // color conversion to sRGB
+  oiio::ColorConfig colorConfig(configOCIOFilePath);
+
+  std::string colorSpace = inBuf.spec().get_string_attribute("AliceVision:ColorSpace", ""); // default image color space is empty
+  if (!colorSpace.empty())
   {
-    if (colorSpace != "sRGB")
-    {
-      oiio::ImageBufAlgo::colorconvert(inBuf, inBuf, colorSpace, "sRGB");
-      ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to sRGB colorspace");
-    }
+      ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpace << " colorspace according to AliceVision:ColorSpace metadata).");
+      //if (colorSpace == "srgb_linear")
+      //    colorSpace = "linear"; // renaming required for conversion with OCIO if necessary
   }
-  else if(imageReadOptions.outputColorSpace == EImageColorSpace::SRGB_LINEAR) // color conversion to linear
+  else
   {
-    if (colorSpace != "Linear")
-    {
-      oiio::ImageBufAlgo::colorconvert(inBuf, inBuf, colorSpace, "Linear");
-      ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to Linear colorspace");
-    }
+      colorSpace = inBuf.spec().get_string_attribute("oiio:ColorSpace", ""); // Check oiio metadata
+      if ((colorSpace == "Linear") || (colorSpace == ""))
+      {
+          std::string colorSpaceFromFileName = colorConfig.getColorSpaceFromFilepath(path);
+          if (!colorSpaceFromFileName.empty())
+          {
+              ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpaceFromFileName << " colorspace according to file name).");
+              colorSpace = colorSpaceFromFileName;
+          }
+          else if (!colorSpace.empty())
+          {
+              ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpace << " colorspace according to oiio:ColorSpace metadata).");
+          }
+          else
+          {
+              ALICEVISION_LOG_TRACE("Read image " << path << " (no colorspace info, supposed to be encoded in " << colorSpaceFromFileName << " ).");
+              colorSpace = "sRGB";
+          }
+      }
+      else
+      {
+          ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpace << " colorspace according to oiio:ColorSpace metadata).");
+      }
   }
+
+  //const std::string& colorSpace = inBuf.spec().get_string_attribute("oiio:ColorSpace", "sRGB"); // default image color space is sRGB
+  //ALICEVISION_LOG_TRACE("Read image " << path << " (encoded in " << colorSpace << " colorspace).");
+
+  if ((imageReadOptions.outputColorSpace != EImageColorSpace::NO_CONVERSION) && (EImageColorSpace_stringToEnum(boost::to_lower_copy(colorSpace)) != imageReadOptions.outputColorSpace))
+  {
+      std::string outputColorSpace = (imageReadOptions.outputColorSpace == EImageColorSpace::SRGB_LINEAR) ? "linear" : EImageColorSpace_enumToString(imageReadOptions.outputColorSpace);
+      oiio::ImageBufAlgo::colorconvert(inBuf, inBuf, colorSpace, outputColorSpace, true, "", "", &colorConfig);
+      ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to " << outputColorSpace << " colorspace");
+  }
+
+  //if(imageReadOptions.outputColorSpace == EImageColorSpace::SRGB) // color conversion to sRGB
+  //{
+  //  if (colorSpace != "sRGB")
+  //  {
+  //    oiio::ImageBufAlgo::colorconvert(inBuf, inBuf, colorSpace, "sRGB");
+  //    ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to sRGB colorspace");
+  //  }
+  //}
+  //else if(imageReadOptions.outputColorSpace == EImageColorSpace::SRGB_LINEAR) // color conversion to linear
+  //{
+  //  if (colorSpace != "Linear")
+  //  {
+  //    oiio::ImageBufAlgo::colorconvert(inBuf, inBuf, colorSpace, "Linear");
+  //    ALICEVISION_LOG_TRACE("Convert image " << path << " from " << colorSpace << " to Linear colorspace");
+  //  }
+  //}
 
   // convert to grayscale if needed
   if(nchannels == 1 && inBuf.spec().nchannels >= 3)
@@ -384,7 +435,7 @@ void readImage(const std::string& path,
 
     // compute luminance via a weighted sum of R,G,B
     // (assuming Rec709 primaries and a linear scale)
-    const float weights[3] = {.2126f, .7152f, .0722f};
+    const float weights[3] = {.2126f, .7152f, .0722f}; // To be changed if not sRGB Rec 709 Linear.
     oiio::ImageBuf grayscaleBuf;
     oiio::ImageBufAlgo::channel_sum(grayscaleBuf, inBuf, weights, convertionROI);
     inBuf.copy(grayscaleBuf);
@@ -513,7 +564,8 @@ void writeImage(const std::string& path,
   {
       imageSpec.set_roi_full(roi);
   }
-
+  imageSpec.attribute("AliceVision:ColorSpace", (imageColorSpace == EImageColorSpace::NO_CONVERSION) ? "srgb_linear" : EImageColorSpace_enumToString(imageColorSpace));
+  
   const oiio::ImageBuf imgBuf = oiio::ImageBuf(imageSpec, const_cast<T*>(image.data())); // original image buffer
   const oiio::ImageBuf* outBuf = &imgBuf;  // buffer to write
 
