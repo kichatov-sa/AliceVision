@@ -117,7 +117,7 @@ int main(int argc, char **argv)
         const float evComp = float(cameraExposureMedian / view.getCameraExposureSetting().getExposure());
  
         image::Image<image::RGBfColor> img; 
-        image::readImage(view.getImagePath(), img, image::EImageColorSpace::LINEAR); 
+        image::readImage(view.getImagePath(), img, image::EImageColorSpace::SRGB_LINEAR); 
  
         for(int pix = 0; pix < view.getWidth() * view.getHeight(); ++pix) 
             img(pix) *= evComp; 
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 
         std::string outputPath = outputFilePath + fs::path(view.getImagePath()).stem().string() + ".EXR"; 
         oiio::ParamValueList metadata = image::getMetadataFromMap(view.getMetadata()); 
-        image::writeImage(outputPath, img, image::EImageColorSpace::LINEAR, metadata); 
+        image::writeImage(outputPath, img, image::EImageColorSpace::SRGB_LINEAR, metadata); 
     } 
  
 /* 
