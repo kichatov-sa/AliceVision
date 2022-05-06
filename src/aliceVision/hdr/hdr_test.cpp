@@ -78,7 +78,7 @@ bool buildBrackets(std::vector<std::string>& paths, std::vector<float>& times, c
 
         ALICEVISION_LOG_INFO("writing to " << temp.string());
 
-        image::writeImage(temp.string(), img_bracket, image::EImageColorSpace::LINEAR);
+        image::writeImage(temp.string(), img_bracket, image::EImageColorSpace::SRGB_LINEAR);
         paths.push_back(temp.string());
     }
 
@@ -115,8 +115,8 @@ BOOST_AUTO_TEST_CASE(hdr_laguerre)
     for(int imageId = 0; imageId < paths.size() - 1; imageId++)
     {
         image::Image<image::RGBfColor> imgA, imgB;
-        image::readImage(paths[imageId], imgA, image::EImageColorSpace::LINEAR);
-        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::LINEAR);
+        image::readImage(paths[imageId], imgA, image::EImageColorSpace::SRGB_LINEAR);
+        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::SRGB_LINEAR);
 
         BOOST_CHECK(imgA.size() == imgB.size());
         double ratioExposures = times[imageId] / times[imageId + 1];
@@ -189,8 +189,8 @@ BOOST_AUTO_TEST_CASE(hdr_debevec)
     for(int imageId = 0; imageId < paths.size() - 1; imageId++)
     {
         image::Image<image::RGBfColor> imgA, imgB;
-        image::readImage(paths[imageId], imgA, image::EImageColorSpace::LINEAR);
-        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::LINEAR);
+        image::readImage(paths[imageId], imgA, image::EImageColorSpace::SRGB_LINEAR);
+        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::SRGB_LINEAR);
 
         BOOST_CHECK(imgA.size() == imgB.size());
         double ratioExposures = times[imageId] / times[imageId + 1];
@@ -272,8 +272,8 @@ BOOST_AUTO_TEST_CASE(hdr_grossberg)
     for(int imageId = 0; imageId < paths.size() - 1; imageId++)
     {
         image::Image<image::RGBfColor> imgA, imgB;
-        image::readImage(paths[imageId], imgA, image::EImageColorSpace::LINEAR);
-        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::LINEAR);
+        image::readImage(paths[imageId], imgA, image::EImageColorSpace::SRGB_LINEAR);
+        image::readImage(paths[imageId + 1], imgB, image::EImageColorSpace::SRGB_LINEAR);
 
         BOOST_CHECK(imgA.size() == imgB.size());
         double ratioExposures = times[imageId] / times[imageId + 1];

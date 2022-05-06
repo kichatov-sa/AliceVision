@@ -141,7 +141,7 @@ int main(int argc, char **argv)
         float ev; 
         oiio::ParamValueList metadata; 
  
-        imageIO::readImage(filePath.path().string(), w, h, img.data(), imageIO::EImageColorSpace::LINEAR); 
+        imageIO::readImage(filePath.path().string(), w, h, img.data(), imageIO::EImageColorSpace::SRGB_LINEAR); 
         img.setSize(w, h); 
         img.setName(filePath.path().stem().string()); 
         imageIO::readImageMetadata(filePath.path().string(), metadata); 
@@ -185,7 +185,7 @@ int main(int argc, char **argv)
         } 
  
         std::string outputPath = outputFilePath + imgList[i].getName() + ".EXR"; 
-        imageIO::writeImage(outputPath, imgList[i].width(), imgList[i].height(), imgList[i].data(), imageIO::EImageQuality::LOSSLESS, imageIO::EImageColorSpace::LINEAR); 
+        imageIO::writeImage(outputPath, imgList[i].width(), imgList[i].height(), imgList[i].data(), imageIO::EImageQuality::LOSSLESS, imageIO::EImageColorSpace::SRGB_LINEAR); 
  
     } 
 */ 
