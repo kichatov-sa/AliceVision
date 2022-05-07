@@ -38,7 +38,7 @@ int setenv(const char* name, const char* value, int overwrite)
 int err = setenv("ALICEVISION_ROOT", std::string(THIS_SOURCE_DIR).c_str(), 1);
 
 // tested extensions
-static std::vector<std::string> extensions = {"jpg", "png", "pgm", "ppm", "tiff", "exr"};
+static std::vector<std::string> extensions = { "jpg", "png", "pgm", "ppm", "tiff", "exr" };
 
 BOOST_AUTO_TEST_CASE(read_unexisting) {
   Image<unsigned char> image;
