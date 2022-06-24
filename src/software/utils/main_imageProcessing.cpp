@@ -712,6 +712,7 @@ int aliceVision_main(int argc, char * argv[])
             image::ImageReadOptions options;
             options.outputColorSpace = image::EImageColorSpace::LINEAR;
             options.applyWhiteBalance = view.getApplyWhiteBalance();
+            options.colorProfileFileName = view.getColorProfileFileName();
 
             // Read original image
             image::Image<image::RGBAfColor> image;
