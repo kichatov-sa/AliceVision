@@ -25,7 +25,7 @@ jobs:
       DEPS_INSTALL_DIR: /opt/AliceVision_install
       BUILD_TYPE: Release
       CTEST_OUTPUT_ON_FAILURE: 1
-      ALICEVISION_ROOT: $PWD/../AV_install
+      ALICEVISION_ROOT: ${{ github.workspace }}/../AV_install
     steps:
       - uses: actions/checkout@v1
 
