@@ -166,6 +166,38 @@ void KeyframeSelector::process()
     mediaInfo.spec.attribute("Exif:FocalLength", _cameraInfos[mediaIndex].focalLength);
   }
 
+  // if the regular mode is enabled, the iteration and keyframe selection are very straightforward
+  if(_useRegularMode)
+  {
+    _keyframeIndexes.clear();
+    unsigned int frameCnt = 0;
+
+    for(std::size_t frameIndex = _startFrame; frameIndex < _framesData.size(); frameIndex += _frameRange)
+    {
+      if(frameCnt >= _maxOutFrame && _maxOutFrame > 0)
+      {
+        break;
+      }
+
+      // write keyframe
+      for(std::size_t mediaIndex = 0; mediaIndex < _feeds.size(); ++mediaIndex)
+      {
+        auto& feed = *_feeds.at(mediaIndex);
+
+        feed.goToFrame(frameIndex + _cameraInfos.at(mediaIndex).frameOffset);
+
+        feed.readImage(image, queryIntrinsics, currentImgName, hasIntrinsics);
+        writeKeyframe(image, frameIndex, mediaIndex);
+      }
+      _framesData[frameIndex].keyframe = true;
+      _keyframeIndexes.push_back(frameIndex);
+
+      frameCnt++;
+
+    }
+    return;
+  }
+
   // iteration process
   _keyframeIndexes.clear();
   std::size_t currentFrameStep = _minFrameStep + 1; // start directly (dont skip minFrameStep first frames)
